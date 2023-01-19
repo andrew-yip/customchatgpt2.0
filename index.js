@@ -11,7 +11,7 @@ dotenv.config()
 
 // create a simple express api that calls the function above
 const app = express()
-const PORT = 3000 // server port - 3000 is typically used for react
+const PORT = 3080 // server port - 3000 is typically used for react
 
 app.post('/', async (req, res) => {
     const response = await openai.createCompletion({
