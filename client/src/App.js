@@ -7,12 +7,29 @@ function App() {
 
   // add state for input and chat log
   const [input, setInput] = useState("")
-  const [chatLog, setChatLog] = useState([{ user: "gpt", message: "How can I help you today? " }])
+  const [chatLog, setChatLog] = useState([{ user: "gpt", message: "How can I help you today? " }, { user: "Me", message: "I want to use chatgpt today." }])
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setChatLog([...chatLog, { user: "me", message: `${input}` }]) // spread operator and adding input to chat log
-    setInput("") // setting input to nothing
+    setChatLog([...chatLog, { user: "Me", message: `${input}` }]) // spread operator and adding input to chat log
+    setInput("") // setting input to blank
+
+    // fetch response to the api combining the chat log
+    // array of messages and sending it as a message to localhost:3000 as a POST
+    // LISTENING ON PORT 3080
+    const response = await fetch("http://localhost:3080/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: chatLog.map((message) => message.message).join("")
+      })
+    });
+
+    const data = await response.json();
+    setChatLog([...chatLog, { user: "gpt", message: `${data.message}` }])
+    console.log(data.message);
   }
 
   return (

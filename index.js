@@ -1,28 +1,37 @@
 const { Configuration, OpenAIApi } = require("openai");
-const configuration = new Configuration({
-    organization: process.env.OPENAI_ORGANIZATION,
-    apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
-const dotenv = require('dotenv')
-const express = require('express')
 
-dotenv.config()
+//const dotenv = require('dotenv')
+const express = require('express')
+const bodyParser = require('body-parser')
+const cors = require('cors')
+
+require('dotenv').config()
 
 // create a simple express api that calls the function above
 const app = express()
 const PORT = 3080 // server port - 3000 is typically used for react
 
+// use body parser and cors
+app.use(bodyParser.json())
+app.use(cors())
+
+const configuration = new Configuration({
+    organization: process.env.OPENAI_ORGANIZATION,
+    apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
+
 app.post('/', async (req, res) => {
+    const { message } = req.body;
+    // console.log(message)
     const response = await openai.createCompletion({
         model: "text-davinci-003",
-        prompt: "Say this is a test",
-        max_tokens: 7,
-        temperature: 0,
+        prompt: `${message}`,
+        max_tokens: 100,
+        temperature: 0.5,
     });
-    console.log(response.data.choices[0].text)
     res.json({
-        data: response.data
+        message: response.data.choices[0].text,
     })
 })
 
