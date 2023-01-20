@@ -21,12 +21,13 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
+// whenever you send a message
 app.post('/', async (req, res) => {
     const { message, currentModel } = req.body;
     console.log("message: ", message)
-    /* console.log("current model: ", currentModel) */
+    console.log("current model: ", currentModel)
     const response = await openai.createCompletion({
-        model: "text-davinci-003",//`${currentModel}`, // "text-davinci-003",
+        model: `${currentModel}`, // "text-davinci-003",
         prompt: `${message}`,
         max_tokens: 100,
         temperature: 0.5,

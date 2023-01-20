@@ -7,8 +7,9 @@ function App() {
 
   // use effect run once when app loads
   useEffect(() => {
-    getEngines();
+    getEngines()
   }, [])
+
 
   // add state for input and chat log
   const [input, setInput] = useState("")
@@ -26,7 +27,7 @@ function App() {
       .then(res => res.json())
       .then(data => {
         console.log(data.models)
-        setModels(data.models.data)
+        setModels(data.models)
       })
   }
 
@@ -47,7 +48,7 @@ function App() {
       },
       body: JSON.stringify({
         message: messages,
-        /* currentModel, */
+        currentModel,
       })
     });
 
@@ -63,7 +64,7 @@ function App() {
           <span>+</span>
           New Chat
         </div>
-        {/*         <div className="models">
+        <div className="models">
           <select onChange={(e) => {
             setCurrentModel(e.target.value)
           }}>
@@ -73,7 +74,7 @@ function App() {
               </option>
             ))}
           </select>
-        </div> */}
+        </div>
       </aside>
       <section className="chatbox">
         <div className="chat-log">
