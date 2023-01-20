@@ -22,10 +22,11 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 app.post('/', async (req, res) => {
-    const { message } = req.body;
+    const { message, currentModel } = req.body;
     console.log("message: ", message)
+    /* console.log("current model: ", currentModel) */
     const response = await openai.createCompletion({
-        model: "text-davinci-003",
+        model: "text-davinci-003",//`${currentModel}`, // "text-davinci-003",
         prompt: `${message}`,
         max_tokens: 100,
         temperature: 0.5,
@@ -35,6 +36,14 @@ app.post('/', async (req, res) => {
     })
 })
 
+/* app.get('/models', async (req, res) => {
+    const response = await openai.listEngines();
+    console.log("response data: ", response.data.data)
+    res.json({
+        models: response.data.data
+    })
+});
+ */
 app.listen(PORT, () => {
     console.log(`App is listening at http://localhost:${PORT}`)
 })
