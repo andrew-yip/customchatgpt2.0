@@ -36,14 +36,14 @@ app.post('/', async (req, res) => {
     })
 })
 
-/* app.get('/models', async (req, res) => {
+app.get('/models', async (req, res) => {
     const response = await openai.listEngines();
     console.log("response data: ", response.data.data)
     res.json({
         models: response.data.data
     })
 });
- */
+
 app.listen(PORT, () => {
     console.log(`App is listening at http://localhost:${PORT}`)
 })

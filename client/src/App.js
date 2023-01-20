@@ -6,9 +6,9 @@ import { useState, useEffect } from 'react'
 function App() {
 
   // use effect run once when app loads
-  /*   useEffect(() => {
-      getEngines();
-    }, []) */
+  useEffect(() => {
+    getEngines();
+  }, [])
 
   // add state for input and chat log
   const [input, setInput] = useState("")
@@ -22,12 +22,12 @@ function App() {
   }
 
   function getEngines() {
-    /* fetch("http://localhost:3080/models")
+    fetch("http://localhost:3080/models")
       .then(res => res.json())
       .then(data => {
-        console.log(data.models.data)
-        setModels(data.models.data)
-      }) */
+        console.log(data.models)
+        //setModels(data.models.data)
+      })
   }
 
   async function handleSubmit(e) {
