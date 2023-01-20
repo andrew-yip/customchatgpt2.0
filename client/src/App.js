@@ -12,8 +12,8 @@ function App() {
 
   // add state for input and chat log
   const [input, setInput] = useState("")
-  /*   const [models, setModels] = useState([])
-    const [currentModel, setCurrentModel] = useState("ada") */
+  const [models, setModels] = useState([])
+  const [currentModel, setCurrentModel] = useState("ada")
   const [chatLog, setChatLog] = useState([{ user: "gpt", message: "How can I help you today? " }, { user: "Me", message: "I want to use chatgpt today." }])
 
   // clear chats
@@ -26,7 +26,7 @@ function App() {
       .then(res => res.json())
       .then(data => {
         console.log(data.models)
-        //setModels(data.models.data)
+        setModels(data.models.data)
       })
   }
 
