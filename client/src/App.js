@@ -9,33 +9,40 @@ function App() {
   const [input, setInput] = useState("")
   const [chatLog, setChatLog] = useState([{ user: "gpt", message: "How can I help you today? " }, { user: "Me", message: "I want to use chatgpt today." }])
 
+  // clear chats
+  function clearChat() {
+    setChatLog([])
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-    setChatLog([...chatLog, { user: "Me", message: `${input}` }]) // spread operator and adding input to chat log
+    let chatLogNew = [...chatLog, { user: "Me", message: `${input}` }]// spread operator and adding input to chat log
     setInput("") // setting input to blank
+    setChatLog(chatLogNew)
 
     // fetch response to the api combining the chat log
     // array of messages and sending it as a message to localhost:3000 as a POST
     // LISTENING ON PORT 3080
+    const messages = chatLogNew.map((message) => message.message).join("\n") // looping through messages after setting and joining together
     const response = await fetch("http://localhost:3080/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        message: chatLog.map((message) => message.message).join("")
+        message: messages
       })
     });
 
     const data = await response.json();
-    setChatLog([...chatLog, { user: "gpt", message: `${data.message}` }])
-    console.log(data.message);
+    setChatLog([...chatLogNew, { user: "gpt", message: `${data.message}` }])
+    // console.log(data.message);
   }
 
   return (
     <div className="App">
       <aside className="sidemenu">
-        <div className="side-menu-button">
+        <div className="side-menu-button" onClick={clearChat}>
           <span>+</span>
           New Chat
         </div>
