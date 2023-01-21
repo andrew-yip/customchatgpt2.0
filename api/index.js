@@ -44,12 +44,11 @@ app.post('/', async (req, res) => {
     })
 
     // PASS MESSAGES TO DATABASE
-    /*  try {
-         //const chat = Chat.create({ ...message })
-         //return res.status(201).json(chat)
-     } catch (error) {
-         //return res.status(500).json(error.message)
-     } */
+    /* try {
+
+    } catch (error) {
+
+    } */
 })
 
 app.get('/models', async (req, res) => {
