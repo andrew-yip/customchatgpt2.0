@@ -10,6 +10,18 @@
   left: 0;
 }
 
+.models {
+  /* models div */
+}
+
+.models-dropdown {
+  border: 1px solid white;
+  border-radius: 5px;
+  padding: 12px;
+  margin-top: 10px;
+  width: 100%
+}
+
 .sidemenu {
   width: 260px;
   background-color: #202123;

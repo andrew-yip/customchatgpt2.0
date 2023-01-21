@@ -59,13 +59,17 @@ function App() {
 
   return (
     <div className="App">
+
+      {/* sidemenu */}
       <aside className="sidemenu">
         <div className="side-menu-button" onClick={clearChat}>
           <span>+</span>
           New Chat
         </div>
+
+        {/* models */}
         <div className="models">
-          <select onChange={(e) => {
+          <select className="models-dropdown" onChange={(e) => {
             setCurrentModel(e.target.value)
           }}>
             {models.map((model, index) => (
@@ -75,13 +79,17 @@ function App() {
             ))}
           </select>
         </div>
+
       </aside>
+
+      {/* chatbox */}
       <section className="chatbox">
         <div className="chat-log">
           {chatLog.map((message, index) => (
             <ChatMessage key={index} message={message} />
           ))}
         </div>
+        {/* chat input box */}
         <div className="chat-input-holder">
           <form onSubmit={handleSubmit}>
             <input className="chat-input-textarea" rows="1" value={input} onChange={(e) => setInput(e.target.value)}>
@@ -89,6 +97,7 @@ function App() {
           </form>
         </div>
       </section>
+
     </div>
   );
 }
