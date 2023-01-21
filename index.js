@@ -7,6 +7,10 @@ const cors = require('cors')
 
 require('dotenv').config()
 
+// mongodb
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URL, () => console.log('Database is successfully connected.'))
+
 // create a simple express api that calls the function above
 const app = express()
 const PORT = 3080 // server port - 3000 is typically used for react
