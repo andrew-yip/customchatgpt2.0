@@ -107,6 +107,11 @@
   text-align: left;
 }
 
+.chat-message {
+  border: 2px solid;
+  border-color: white
+}
+
 .chat-message.chatgpt {
   background-color: #444654;
 }

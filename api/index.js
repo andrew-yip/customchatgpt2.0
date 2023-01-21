@@ -11,6 +11,9 @@ require('dotenv').config()
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_URL, () => console.log('Database is successfully connected.'))
 
+// Chat schema
+const Chat = require('./models/Chat')
+
 // create a simple express api that calls the function above
 const app = express()
 const PORT = 3080 // server port - 3000 is typically used for react
@@ -39,6 +42,14 @@ app.post('/', async (req, res) => {
     res.json({
         message: response.data.choices[0].text,
     })
+
+    // PASS MESSAGES TO DATABASE
+    /*  try {
+         //const chat = Chat.create({ ...message })
+         //return res.status(201).json(chat)
+     } catch (error) {
+         //return res.status(500).json(error.message)
+     } */
 })
 
 app.get('/models', async (req, res) => {
