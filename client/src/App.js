@@ -62,17 +62,6 @@ function App() {
     setChatLog([...chatLogNew, { user: "gpt", message: `${data.message}` }])
     // console.log(data.message);
 
-    /* const updateChatResponse = await fetch("http://localhost:3080/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: messages,
-        users: users,
-        currentModel,
-      })
-    }); */
   }
 
   return (
