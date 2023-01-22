@@ -7,6 +7,8 @@ const ChatSchema = new mongoose.Schema({
     model: {
         type: String,
     },
+
+    // need to configure unique id
     id: {
         type: String,
     }
