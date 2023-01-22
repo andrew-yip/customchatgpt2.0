@@ -15,7 +15,7 @@ function App() {
   // add state for input and chat log
   const [input, setInput] = useState("")
   const [models, setModels] = useState([])
-  const [currentModel, setCurrentModel] = useState("text-davinci-003")
+  const [currentModel, setCurrentModel] = useState("babbage")
   const [chatLog, setChatLog] = useState([{ user: "gpt", message: "How can I help you today? " }, { user: "Me", message: "I want to use chatgpt today." }])
 
   // clear chats
@@ -41,7 +41,11 @@ function App() {
     // fetch response to the api combining the chat log
     // array of messages and sending it as a message to localhost:3000 as a POST
     // LISTENING ON PORT 3080
+
     const messages = chatLogNew.map((message) => message.message).join("\n") // looping through messages after setting and joining together
+    const users = chatLogNew.map((user) => user.user).join("\n")
+    //console.log(users)
+
     const response = await fetch("http://localhost:3080/", {
       method: "POST",
       headers: {
@@ -49,6 +53,7 @@ function App() {
       },
       body: JSON.stringify({
         message: messages,
+        users: users,
         currentModel,
       })
     });
@@ -56,6 +61,18 @@ function App() {
     const data = await response.json();
     setChatLog([...chatLogNew, { user: "gpt", message: `${data.message}` }])
     // console.log(data.message);
+
+    /* const updateChatResponse = await fetch("http://localhost:3080/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: messages,
+        users: users,
+        currentModel,
+      })
+    }); */
   }
 
   return (

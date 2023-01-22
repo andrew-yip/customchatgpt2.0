@@ -30,8 +30,9 @@ const openai = new OpenAIApi(configuration);
 
 // whenever you send a message
 app.post('/', async (req, res) => {
-    const { message, currentModel } = req.body;
+    const { message, users, currentModel } = req.body;
     console.log("message: ", message)
+    console.log("users: ", users)
     console.log("current model: ", currentModel)
     const response = await openai.createCompletion({
         model: `${currentModel}`, // "text-davinci-003",
@@ -43,12 +44,21 @@ app.post('/', async (req, res) => {
         message: response.data.choices[0].text,
     })
 
-    // PASS MESSAGES TO DATABASE
-    /* try {
+    // Pass messages and currentModel to MongoDB
+    let messageToDatabase = message.split("\n")
+    let userToDatabase = users.split("\n")
+    let combinedArray = messageToDatabase.map((elem, index) => userToDatabase[index] + ": " + elem)
 
+    // 1. CREATE ID
+    // 2. IF ARRAY WITH ID EXISTS THEN UPDATE THAT ARRAY WITH APPROPRIATE CHATS AND MODEL (IF CHANGED)
+
+    try {
+        const chat = await Chat.create({ messages: combinedArray, model: currentModel })
+        return res.status(201).json(chat)
     } catch (error) {
-
-    } */
+        console.log("ERROR: ", error.message)
+        //return res.status(500).json(error.message)
+    }
 })
 
 app.get('/models', async (req, res) => {
