@@ -31,34 +31,43 @@ const openai = new OpenAIApi(configuration);
 // whenever you send a message
 app.post('/', async (req, res) => {
     const { message, users, currentModel } = req.body;
-    console.log("message: ", message)
-    console.log("users: ", users)
-    console.log("current model: ", currentModel)
-    const response = await openai.createCompletion({
-        model: `${currentModel}`, // "text-davinci-003",
-        prompt: `${message}`,
-        max_tokens: 100,
-        temperature: 0.5,
-    });
-    res.json({
-        message: response.data.choices[0].text,
-    })
-
-    // Pass messages and currentModel to MongoDB
-    let messageToDatabase = message.split("\n")
-    let userToDatabase = users.split("\n")
-    let combinedArray = messageToDatabase.map((elem, index) => userToDatabase[index] + ": " + elem)
-
-    // 1. CREATE ID
-    // 2. IF ARRAY WITH ID EXISTS THEN UPDATE THAT ARRAY WITH APPROPRIATE CHATS AND MODEL (IF CHANGED)
-
     try {
-        const chat = await Chat.create({ messages: combinedArray, model: currentModel })
-        return res.status(201).json(chat)
+        const response = await openai.createCompletion({
+            model: `${currentModel}`, // "text-davinci-003",
+            prompt: `${message}`,
+            max_tokens: 100,
+            temperature: 0.5,
+        })
+
+        // return to client
+        res.json({
+            message: response.data.choices[0].text,
+        })
+
+        // Pass messages and currentModel to MongoDB
+        let messageToDatabase = message.split("\n")
+        let userToDatabase = users.split("\n")
+        let combinedArray = messageToDatabase.map((elem, index) => userToDatabase[index] + ": " + elem)
+
+        let fromOpenAi = response.data.choices[0].text.replace('\n', '')
+        console.log("from open ai: ", fromOpenAi)
+
+        combinedArray.push("gpt: ", fromOpenAi)
+        console.log("combined array: ", combinedArray)
+
+        // STORE IN MONGO DB
+        try {
+            const chat = await Chat.create({ messages: combinedArray, model: currentModel })
+            return res.status(201).json(chat)
+        } catch (error) {
+            console.log("ERROR: ", error.message)
+            //return res.status(500).json(error.message)
+        }
     } catch (error) {
-        console.log("ERROR: ", error.message)
-        //return res.status(500).json(error.message)
+        console.log(error)
+        throw error
     }
+
 })
 
 app.get('/models', async (req, res) => {
