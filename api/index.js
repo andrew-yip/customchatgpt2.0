@@ -1,4 +1,5 @@
 const { Configuration, OpenAIApi } = require("openai");
+import { v4 as uuid } from 'uuid';
 
 //const dotenv = require('dotenv')
 const express = require('express')
