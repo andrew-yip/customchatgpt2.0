@@ -79,6 +79,19 @@ app.get('/models', async (req, res) => {
     })
 });
 
+// see if user id exists and add to existing array
+app.get('/:id', async (req, res) => {
+
+})
+
+app.put('/:id', async (req, res) => {
+
+})
+
+app.delete('/:id', async (req, res) => {
+
+})
+
 app.listen(PORT, () => {
     console.log(`App is listening at http://localhost:${PORT}`)
 })
