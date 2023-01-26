@@ -1,5 +1,6 @@
 const { Configuration, OpenAIApi } = require("openai");
 import { v4 as uuid } from 'uuid';
+import Chat from './models/Chat';
 
 //const dotenv = require('dotenv')
 const express = require('express')
@@ -83,14 +84,45 @@ app.get('/models', async (req, res) => {
 app.get('/:id', async (req, res) => {
     const { id } = req.params.id;
 
+    try {
+        const chat = await Chat.findById(id)
+        if (!chat) {
+            throw new Error("No such chat")
+        }
+    } catch (error) {
+        return res.status(500).json(error.message)
+    }
+
 })
 
 app.put('/:id', async (req, res) => {
     const { id } = req.params.id;
+
+    try {
+        const chat = await Chat.findById(id)
+        if (!chat) {
+            throw new Error("No such chat")
+        }
+
+        // UPDATE
+    } catch (error) {
+        return res.status(500).json(error.message)
+    }
 })
 
 app.delete('/:id', async (req, res) => {
     const { id } = req.params.id;
+
+    try {
+        const chat = await Chat.findById(id)
+        if (!chat) {
+            throw new Error("No such chat")
+        }
+
+        // DELETE FUNCTION HERE
+    } catch (error) {
+        return res.status(500).json(error.message)
+    }
 
 })
 
