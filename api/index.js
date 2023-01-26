@@ -81,14 +81,16 @@ app.get('/models', async (req, res) => {
 
 // see if user id exists and add to existing array
 app.get('/:id', async (req, res) => {
+    const { id } = req.params.id;
 
 })
 
 app.put('/:id', async (req, res) => {
-
+    const { id } = req.params.id;
 })
 
 app.delete('/:id', async (req, res) => {
+    const { id } = req.params.id;
 
 })
 
