@@ -67,7 +67,7 @@ app.post('/', async (req, res) => {
             // STORE IN MONGO DB
             try {
                 const chat = await Chat.create({ user: user || "gpt", message: messageText, response: fromOpenAi, timestamp: timestamp, model: currentModel })
-                console.log("Chat: ", chat)
+                console.log("Chat message put into MongoDB: ", chat)
             } catch (error) {
                 console.log("Error: ", error.message)
             }
