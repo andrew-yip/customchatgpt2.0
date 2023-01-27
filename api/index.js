@@ -1,6 +1,4 @@
 const { Configuration, OpenAIApi } = require("openai");
-import { v4 as uuid } from 'uuid';
-import Chat from './models/Chat';
 
 //const dotenv = require('dotenv')
 const express = require('express')
@@ -11,6 +9,7 @@ require('dotenv').config()
 
 // mongodb
 const mongoose = require('mongoose');
+const moment = require('moment');
 mongoose.connect(process.env.MONGO_URL, () => console.log('Database is successfully connected.'))
 
 // Chat schema
@@ -35,7 +34,7 @@ app.post('/', async (req, res) => {
     const { message, users, currentModel } = req.body;
     try {
         const response = await openai.createCompletion({
-            model: `${currentModel}`, // "text-davinci-003",
+            model: `${currentModel}`,
             prompt: `${message}`,
             max_tokens: 100,
             temperature: 0.5,
@@ -51,20 +50,28 @@ app.post('/', async (req, res) => {
         let userToDatabase = users.split("\n")
         let combinedArray = messageToDatabase.map((elem, index) => userToDatabase[index] + ": " + elem)
 
+
+        console.log("Users array: ", users)
+        console.log("combined array: ", combinedArray)
+
         let fromOpenAi = response.data.choices[0].text.replace('\n', '')
         console.log("from open ai: ", fromOpenAi)
 
-        combinedArray.push("gpt: ", fromOpenAi)
-        console.log("combined array: ", combinedArray)
 
-        // STORE IN MONGO DB
-        try {
-            const chat = await Chat.create({ messages: combinedArray, model: currentModel })
-            return res.status(201).json(chat)
-        } catch (error) {
-            console.log("ERROR: ", error.message)
-            //return res.status(500).json(error.message)
-        }
+        combinedArray.forEach(async (item) => {
+            let message = item.split(':')
+            let user = message[0]
+            let messageText = message[1]
+            let timestamp = moment().format();
+
+            // STORE IN MONGO DB
+            try {
+                const chat = await Chat.create({ user: user || "gpt", message: messageText, response: fromOpenAi, timestamp: timestamp, model: currentModel })
+                console.log("Chat: ", chat)
+            } catch (error) {
+                console.log("Error: ", error.message)
+            }
+        })
     } catch (error) {
         console.log(error)
         throw error
