@@ -61,8 +61,7 @@ function App() {
     // CHAT GPT RESPONSE
     const data = await response.json();
     setChatLog([...chatLogNew, { user: "gpt", message: `${data.message}` }])
-    // console.log(data.message);
-
+    console.log(data.message);
   }
 
   return (
