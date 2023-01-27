@@ -44,7 +44,7 @@ function App() {
 
     const messages = chatLogNew.map((message) => message.message).join("\n") // looping through messages after setting and joining together
     const users = chatLogNew.map((user) => user.user).join("\n")
-    //console.log(users)
+    console.log("Users array chat: ", users)
 
     const response = await fetch("http://localhost:3080/", {
       method: "POST",
