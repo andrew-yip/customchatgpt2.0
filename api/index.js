@@ -87,51 +87,46 @@ app.get('/models', async (req, res) => {
     })
 });
 
-// see if user id exists and add to existing array
-app.get('/:id', async (req, res) => {
-    const { id } = req.params.id;
-
+// GET
+app.get('/chats/:id', async (req, res) => {
     try {
-        const chat = await Chat.findById(id)
-        if (!chat) {
-            throw new Error("No such chat")
-        }
+        const chat = await Chat.findById(req.params.id);
+        if (!chat) return res.status(404).json({ message: 'Chat not found' });
+        return res.json(chat);
     } catch (error) {
-        return res.status(500).json(error.message)
+        return res.status(500).json({ message: error.message });
     }
+});
 
-})
-
-app.put('/:id', async (req, res) => {
-    const { id } = req.params.id;
-
+// PUT
+app.put('/chats/:id', async (req, res) => {
     try {
-        const chat = await Chat.findById(id)
+        const { message, response, model } = req.body;
+        const chat = await Chat.findByIdAndUpdate(req.params.id, { message, response, model }, { new: true });
         if (!chat) {
-            throw new Error("No such chat")
+            return res.status(404).json({ message: 'Chat not found' });
         }
-
-        // UPDATE
+        res.json(chat);
     } catch (error) {
-        return res.status(500).json(error.message)
+        res.status(500).json(error.message);
     }
-})
+});
 
-app.delete('/:id', async (req, res) => {
-    const { id } = req.params.id;
-
+// DELETE
+app.delete('/chats/:id', async (req, res) => {
     try {
-        const chat = await Chat.findById(id)
-        if (!chat) {
-            throw new Error("No such chat")
+        const id = req.params.id;
+        const result = await Chat.deleteOne({ _id: id });
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ message: 'Chat not found' });
         }
-
-        // DELETE FUNCTION HERE
+        res.json({ message: 'Chat deleted successfully' });
     } catch (error) {
-        return res.status(500).json(error.message)
+        console.log(error);
+        res.status(500).json({ message: 'Error deleting chat' });
     }
+});
 
-})
 
 app.listen(PORT, () => {
     console.log(`App is listening at http://localhost:${PORT}`)
