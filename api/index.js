@@ -66,10 +66,16 @@ app.post('/', async (req, res) => {
 
             // STORE IN MONGO DB
             try {
-                const chat = await Chat.create({ user: user || "gpt", message: messageText, response: fromOpenAi, timestamp: timestamp, model: currentModel })
-                console.log("Chat message put into MongoDB: ", chat)
+                const chat = await Chat.create({ user: user || "gpt", message: messageText, response: fromOpenAi, timestamp: timestamp, model: currentModel });
+                console.log("Chat message put into MongoDB: ", chat);
             } catch (error) {
-                console.log("Error: ", error.message)
+                if (error.code === 11000) {
+                    console.log("Duplicate key error, chat already exists in the collection");
+                } else if (error.name === 'MongoError' && error.code === 16755) {
+                    console.log("Operation timed out, try increasing the timeout limit");
+                } else {
+                    console.log("Error: ", error.message);
+                }
             }
         })
     } catch (error) {
