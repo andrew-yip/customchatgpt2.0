@@ -91,6 +91,8 @@ app.get('/models', async (req, res) => {
 app.get('/chats/:id', async (req, res) => {
     try {
         const chat = await Chat.findById(req.params.id);
+
+        // if no chat is found
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
         return res.json(chat);
     } catch (error) {
@@ -103,6 +105,8 @@ app.put('/chats/:id', async (req, res) => {
     try {
         const { message, response, model } = req.body;
         const chat = await Chat.findByIdAndUpdate(req.params.id, { message, response, model }, { new: true });
+
+        // if no chat is found
         if (!chat) {
             return res.status(404).json({ message: 'Chat not found' });
         }
@@ -117,6 +121,8 @@ app.delete('/chats/:id', async (req, res) => {
     try {
         const id = req.params.id;
         const result = await Chat.deleteOne({ _id: id });
+
+        // if there is no chats to delete
         if (result.deletedCount === 0) {
             return res.status(404).json({ message: 'Chat not found' });
         }
