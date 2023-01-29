@@ -90,6 +90,8 @@ app.get('/models', async (req, res) => {
 // GET
 app.get('/chats/:id', async (req, res) => {
     try {
+
+        // get the id from params then from mongoDB and tries to find it in the collection
         const chat = await Chat.findById(req.params.id);
 
         // if no chat is found
@@ -104,6 +106,8 @@ app.get('/chats/:id', async (req, res) => {
 app.put('/chats/:id', async (req, res) => {
     try {
         const { message, response, model } = req.body;
+
+        // get the id from params then from mongoDB and tries to find it in the collection
         const chat = await Chat.findByIdAndUpdate(req.params.id, { message, response, model }, { new: true });
 
         // if no chat is found
@@ -120,6 +124,8 @@ app.put('/chats/:id', async (req, res) => {
 app.delete('/chats/:id', async (req, res) => {
     try {
         const id = req.params.id;
+
+        // get the id from params then from mongoDB and tries to find it in the collection
         const result = await Chat.deleteOne({ _id: id });
 
         // if there is no chats to delete
