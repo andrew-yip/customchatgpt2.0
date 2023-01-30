@@ -93,23 +93,37 @@ app.get('/models', async (req, res) => {
     })
 });
 
+
+/* CRUD OPERATIONS */
+
 // GET
-app.get('/chats/:id', async (req, res) => {
+app.get('/chats/get/:id', async (req, res) => {
     try {
 
+        console.log("in get request")
         // get the id from params then from mongoDB and tries to find it in the collection
         const chat = await Chat.findById(req.params.id);
+        console.log("Chat stuff: ", chat)
 
         // if no chat is found
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
-        return res.json(chat);
+        //return res.json(chat)
+        return res.json({
+            id: chat._id,
+            user: chat.id,
+            message: chat.message,
+            response: chat.response,
+            timestamp: chat.timestamp,
+            model: chat.model,
+            v: chat.__v
+        });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
 });
 
 // PUT
-app.put('/chats/:id', async (req, res) => {
+app.put('/chats/put/:id', async (req, res) => {
     try {
         const { message, response, model } = req.body;
 
@@ -127,7 +141,7 @@ app.put('/chats/:id', async (req, res) => {
 });
 
 // DELETE
-app.delete('/chats/:id', async (req, res) => {
+app.delete('/chats/delete/:id', async (req, res) => {
     try {
         const id = req.params.id;
 

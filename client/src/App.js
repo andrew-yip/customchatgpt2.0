@@ -6,17 +6,30 @@ import ChatMessage from './components/ChatMessage';
 
 function App() {
 
-  // use effect run once when app loads
-  useEffect(() => {
-    getEngines()
-  }, [])
-
-
   // add state for input and chat log
   const [input, setInput] = useState("")
   const [models, setModels] = useState([])
   const [currentModel, setCurrentModel] = useState("babbage")
-  const [chatLog, setChatLog] = useState([{ user: "gpt", message: "How can I help you today? " }, { user: "Me", message: "I want to use chatgpt today." }])
+  const [chatId, setChatId] = useState("")
+  const [chatLog, setChatLog] = useState([])
+
+  // use effect run once when app loads
+  useEffect(() => {
+    getEngines();
+  }, [])
+
+  useEffect(() => {
+    // make GET request to backend to get chat data
+    fetch(`http://localhost:3080/chats/get/${chatId}`)
+      .then(res => res.json())
+      .then(data => {
+        // update chatLog state with data returned from backend
+        console.log("Data from api: ", data)
+        setChatLog(data.message);
+        setChatId(chatId);
+      })
+  }, [chatId])
+
 
   // clear chats
   function clearChat() {
