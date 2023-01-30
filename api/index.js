@@ -114,7 +114,7 @@ app.put('/chats/:id', async (req, res) => {
         const { message, response, model } = req.body;
 
         // get the id from params then from mongoDB and tries to find it in the collection
-        const chat = await Chat.findByIdAndUpdate(req.params.id, { message, response, model }, { new: true });
+        const chat = await Chat.findByIdAndUpdate(req.params.id, { $set: { message, response, model } }, { new: true });
 
         // if no chat is found
         if (!chat) {
