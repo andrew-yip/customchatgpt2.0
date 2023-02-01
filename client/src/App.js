@@ -10,7 +10,8 @@ function App() {
   const [input, setInput] = useState("")
   const [models, setModels] = useState([])
   const [currentModel, setCurrentModel] = useState("babbage")
-  const [chatId, setChatId] = useState("")
+  const [chatId, setChatId] = useState("63d70e70a40ad7370d7a0188") //default
+  //const [chatId, setChatId] = useState("") //default
   const [chatLog, setChatLog] = useState([])
 
   // use effect run once when app loads
@@ -24,7 +25,7 @@ function App() {
       .then(res => res.json())
       .then(data => {
         console.log('Data from API:', data);
-        setChatLog(data.message);
+        setChatLog([{ user: "me", message: `${data.message}` }, { user: "gpt", message: `${data.response}` }]);
         setChatId(chatId);
       })
   }, [chatId])
@@ -104,9 +105,12 @@ function App() {
       {/* chatbox */}
       <section className="chatbox">
         <div className="chat-log">
-          {chatLog.map((message, index) => (
-            <ChatMessage key={index} message={message} />
-          ))}
+          {chatLog.map((message, index) => {
+            return (
+              <ChatMessage key={index} message={message} />
+            );
+          }
+          )}
         </div>
         {/* chat input box */}
         <div className="chat-input-holder">
