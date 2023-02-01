@@ -97,19 +97,19 @@ app.get('/models', async (req, res) => {
 /* CRUD OPERATIONS */
 
 // GET
-app.get('/chats/get/:id', async (req, res) => {
+app.get('/chats/get/:chatId', async (req, res) => {
     try {
 
         console.log("in get request")
         // get the id from params then from mongoDB and tries to find it in the collection
-        const chat = await Chat.findById(req.params.id);
+        const chat = await Chat.findById(req.params.chatId);
         console.log("Chat stuff: ", chat)
 
         // if no chat is found
         if (!chat) return res.status(404).json({ message: 'Chat not found' });
         //return res.json(chat)
         return res.json({
-            id: chat._id,
+            chatId: chat._id,
             user: chat.id,
             message: chat.message,
             response: chat.response,
@@ -123,12 +123,12 @@ app.get('/chats/get/:id', async (req, res) => {
 });
 
 // PUT
-app.put('/chats/put/:id', async (req, res) => {
+app.put('/chats/put/:chatId', async (req, res) => {
     try {
         const { message, response, model } = req.body;
 
         // get the id from params then from mongoDB and tries to find it in the collection
-        const chat = await Chat.findByIdAndUpdate(req.params.id, { $set: { message, response, model } }, { new: true });
+        const chat = await Chat.findByIdAndUpdate(req.params.chatId, { $set: { message, response, model } }, { new: true });
 
         // if no chat is found
         if (!chat) {
@@ -141,12 +141,12 @@ app.put('/chats/put/:id', async (req, res) => {
 });
 
 // DELETE
-app.delete('/chats/delete/:id', async (req, res) => {
+app.delete('/chats/delete/:chatId', async (req, res) => {
     try {
-        const id = req.params.id;
+        const chatId = req.params.chatId;
 
         // get the id from params then from mongoDB and tries to find it in the collection
-        const result = await Chat.deleteOne({ _id: id });
+        const result = await Chat.deleteOne({ _chatId: chatId });
 
         // if there is no chats to delete
         if (result.deletedCount === 0) {

@@ -23,8 +23,7 @@ function App() {
     fetch(`http://localhost:3080/chats/get/${chatId}`)
       .then(res => res.json())
       .then(data => {
-        // update chatLog state with data returned from backend
-        console.log("Data from api: ", data)
+        console.log('Data from API:', data);
         setChatLog(data.message);
         setChatId(chatId);
       })
