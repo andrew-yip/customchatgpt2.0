@@ -10,8 +10,8 @@ function App() {
   const [input, setInput] = useState("")
   const [models, setModels] = useState([])
   const [currentModel, setCurrentModel] = useState("babbage")
-  const [chatId, setChatId] = useState("63d70e70a40ad7370d7a0188") //default
-  //const [chatId, setChatId] = useState("") //default
+  //const [chatId, setChatId] = useState("63d70e70a40ad7370d7a0188") //default
+  const [chatId, setChatId] = useState("") //default
   const [chatLog, setChatLog] = useState([])
 
   // use effect run once when app loads
