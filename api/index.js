@@ -50,13 +50,11 @@ app.post('/', async (req, res) => {
         let userToDatabase = users.split("\n")
         let combinedArray = messageToDatabase.map((elem, index) => userToDatabase[index] + ": " + elem)
 
-
         console.log("Users array: ", users)
         console.log("combined array: ", combinedArray)
 
         let fromOpenAi = response.data.choices[0].text.replace('\n', '')
         console.log("from open ai: ", fromOpenAi)
-
 
         combinedArray.forEach(async (item) => {
             let message = item.split(':')
@@ -68,6 +66,9 @@ app.post('/', async (req, res) => {
             try {
                 const chat = await Chat.create({ user: user || "gpt", message: messageText, response: fromOpenAi, timestamp: timestamp, model: currentModel });
                 console.log("Chat message put into MongoDB: ", chat);
+                res.json({
+                    object: chat
+                })
             } catch (error) {
                 if (error.code === 11000) {
                     console.log("Duplicate key error, chat already exists in the collection");
@@ -82,7 +83,6 @@ app.post('/', async (req, res) => {
         console.log(error)
         throw error
     }
-
 })
 
 app.get('/models', async (req, res) => {

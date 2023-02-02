@@ -11,7 +11,7 @@ function App() {
   const [models, setModels] = useState([])
   const [currentModel, setCurrentModel] = useState("babbage")
   //const [chatId, setChatId] = useState("63d70e70a40ad7370d7a0188") //default
-  const [chatId, setChatId] = useState("") //default
+  //const [chatId, setChatId] = useState("") //default
   const [chatLog, setChatLog] = useState([])
 
   // use effect run once when app loads
@@ -19,17 +19,22 @@ function App() {
     getEngines();
   }, [])
 
-  useEffect(() => {
-    // make GET request to backend to get chat data
-    fetch(`http://localhost:3080/chats/get/${chatId}`)
-      .then(res => res.json())
-      .then(data => {
-        console.log('Data from API:', data);
-        setChatLog([{ user: "me", message: `${data.message}` }, { user: "gpt", message: `${data.response}` }]);
-        setChatId(chatId);
-      })
-  }, [chatId])
-
+  /*   function submitHandler(e) {
+      try {
+        // 1. GET CHAT ID
+        if (!id) {
+          fetch(`http://localhost:3080/chats/get/${id}`)
+            .then(res => res.json())
+            .then(data => {
+              console.log('Data from API:', data);
+              setChatLog([{ user: "me", message: `${data.message}` }, { user: "gpt", message: `${data.response}` }]);
+              //setChatId(chatId);
+            })
+        }
+      } catch (error) {
+        console.log("Error: ", error.message)
+      }
+    } */
 
   // clear chats
   function clearChat() {
